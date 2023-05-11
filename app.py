@@ -13,6 +13,6 @@ app = Flask(__name__)
 # / says this is the root or home page of the website
 @app.route("/") # Called a decorator, specifically the route decorator
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return "<h1>Hello, World!</h1>"
 # Need to run "set FLASK_APP=flaskblog.py" before running - Nevermind, just set the file name to app.py
 # To run use: "flask run" - still need to do this
