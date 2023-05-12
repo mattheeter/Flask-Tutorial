@@ -9,19 +9,35 @@ from flask import Flask, render_template
 # If script is run with Python directly, __name__ == __main__
 app = Flask(__name__)
 
+# Adding dummy data to show how data is passed to the app using list of dictionaries
+posts = [
+    {
+        "author":"Matthew Heeter",
+        "title":"Blog Post 1",
+        "content":"First post content",
+        "date_posted":"May 5, 2023"
+    },
+    {
+        "author":"Jane Doe",
+        "title":"Blog Post 2",
+        "content":"Second post content",
+        "date_posted":"May 6, 2023"
+    }
+]
+
 # Routes are what are typed into browser to go to different pages (home, about, etc.)
 # / says this is the root or home page of the website
 @app.route("/") # Called a decorator, specifically the route decorator
 @app.route("/home") # Adding second decorator so that you can use both / and /home to go to the home page
 def home():
-    return render_template('home.html')
+    return render_template('home.html', posts=posts) # Using posts variable to pass data to templates
 # Need to run "set FLASK_APP=flaskblog.py" before running - Nevermind, just set the file name to app.py
 # To run use: "flask run" - still need to do this - After adding below conditional, just run using typical run button
 
 # Adding an about route
 @app.route("/about")
 def about():
-    return render_template('about.html')
+    return render_template('about.html', title="About") # Passing in title so that default from template's else is not used
 
 # Only true when this script is run directly, as stated above
 if __name__ == "__main__":
