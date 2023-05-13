@@ -2,7 +2,7 @@
 # then choose the python application with the dark background to get venv to work
 
 # Importing the Flask class and the render template function (used to add html templates to the pages)
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 
 # Instantiating a Flask class called app to act as our WSGI (Web Server Gateway Interface)
 # __name__ is a variable that stores the name of the module, tells flask where to look for templates, static files, etc.
