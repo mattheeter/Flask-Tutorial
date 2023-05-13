@@ -2,12 +2,14 @@
 # then choose the python application with the dark background to get venv to work
 
 # Importing the Flask class and the render template function (used to add html templates to the pages)
-from flask import Flask, render_template, url_for
-
+from flask import Flask, render_template, url_for, flash, redirect
+from forms import RegistrationForm, LoginForm
 # Instantiating a Flask class called app to act as our WSGI (Web Server Gateway Interface)
 # __name__ is a variable that stores the name of the module, tells flask where to look for templates, static files, etc.
 # If script is run with Python directly, __name__ == __main__
 app = Flask(__name__)
+
+app.config["SECRET_KEY"] = "94b0d2b2264bdab0bb38cb91ce256007"
 
 # Adding dummy data to show how data is passed to the app using list of dictionaries
 posts = [
@@ -30,14 +32,37 @@ posts = [
 @app.route("/") # Called a decorator, specifically the route decorator
 @app.route("/home") # Adding second decorator so that you can use both / and /home to go to the home page
 def home():
-    return render_template('home.html', posts=posts) # Using posts variable to pass data to templates
+    return render_template("home.html", posts=posts) # Using posts variable to pass data to templates
 # Need to run "set FLASK_APP=flaskblog.py" before running - Nevermind, just set the file name to app.py
 # To run use: "flask run" - still need to do this - After adding below conditional, just run using typical run button
 
 # Adding an about route
 @app.route("/about")
 def about():
-    return render_template('about.html', title="About") # Passing in title so that default from template's else is not used
+    return render_template("about.html", title="About") # Passing in title so that default from template's else is not used
+
+@app.route("/register", methods=["GET", "POST"]) # Creating a registration route (for creating accounts)
+def register():
+    form = RegistrationForm() # Instantiating a RegistrationForm object
+    if form.validate_on_submit():
+        flash(f"Account created for {form.username.data}!", "success")
+        # If the form is validated, flash a message with the username
+        return redirect(url_for("home"))
+        # And redirect to the home page 
+    return render_template("register.html", title="Register", form=form)
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        if form.email.data == "admin@blog.com" and form.password.data == "password":
+            # If the email and password match, allow the login
+            flash("You have been logged in!", "success")
+            # Flash a message and return home
+            return redirect(url_for("home"))
+        else:
+            flash("Login Unsuccessful. Please check username and password.", "danger")
+    return render_template("login.html", title="Login", form=form)
 
 # Only true when this script is run directly, as stated above
 if __name__ == "__main__":
