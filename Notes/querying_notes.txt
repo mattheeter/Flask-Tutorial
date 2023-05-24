@@ -1,0 +1,37 @@
+# For clearing python interpreter console: https://stackoverflow.com/questions/517970/how-to-clear-the-interpreter-console
+When creating data base via python in terminal, use:
+from <app name> import app, db
+app.app_context().push()
+db.create_all()
+
+Adding to database via python in terminal:
+from <app name> import User, Post
+user_1 = (...)
+db.session.add(user_1)
+db.session.commit()
+
+Querying database:
+User.query.all() # for all
+User.query.first() # for first user
+User.query.filter_by(username='<username>').all() # for getting specific username
+user = User.query.filter_by(username='<username>').first() # Creating a variable storing a user
+user.id # Calling attribute of <user>
+user.posts # Displays blank list at current moment
+
+# Creating post with necessary attributes for the id of our user variable, date is not specified but should be added automatically
+post_1 = Post(title='Blog 1', content='First Post Content!', user_id=user.id)
+post_2 = Post(title='Blog 2', content='Second Post Content!', user_id=user.id) # Another post
+db.session.add(post_1)
+db.session.add(post_2)
+db.session.commit() # Adding and committing these new posts
+
+user.posts # Now has posts
+
+post = Post.query.first() # Variable equal to first post
+post.user_id # Gives the id of the user that wrote the post, showing that these are linked
+# Since we used backef="author" in app User class, we can access the actual username Post object
+post.author # To get the username
+
+db.drop_all() # Removes all data from database
+db.create.all() # Recreates database structure *Does Not Add Back Data*
+# Querying User or Post will give blank lists

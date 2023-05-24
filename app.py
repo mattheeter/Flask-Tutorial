@@ -1,8 +1,10 @@
 # Need to go to this path: C:\Users\matth\OneDrive - University of Cincinnati\Coding\Environments\flask_tutorial_env\Scripts
 # then choose the python application with the dark background to get venv to work
 
+from datetime import datetime
 # Importing the Flask class and the render template function (used to add html templates to the pages)
 from flask import Flask, render_template, url_for, flash, redirect
+from flask_sqlalchemy import SQLAlchemy
 from forms import RegistrationForm, LoginForm
 # Instantiating a Flask class called app to act as our WSGI (Web Server Gateway Interface)
 # __name__ is a variable that stores the name of the module, tells flask where to look for templates, static files, etc.
@@ -10,6 +12,30 @@ from forms import RegistrationForm, LoginForm
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = "94b0d2b2264bdab0bb38cb91ce256007"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db" # Setting location of our database, "///" specify that database
+                                                            # will be created in current directory
+db = SQLAlchemy(app) # Instantiating a data base
+
+class User(db.Model): # Creating class User which inherits from db.model
+    id = db.Column(db.Integer, primary_key=True) # ID is of integer type and is unique to user (primary_key=True)
+    username = db.Column(db.String(20), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    image_file = db.Column(db.String(20), nullable=False, default="default.jpg") # User profile picture, not unique
+    password = db.Column(db.String(60), nullable=False)
+    posts = db.relationship("Post", backref="author", lazy=True)
+    
+    def __repr__(self): # Returns a printable representation of an object
+        return f"User('{self.username}', '{self.email}', '{self.image_file}', '{self.image_file}')"
+    
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow) # Using db.DateTime type for type, and datetime for default
+    content = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+
+    def __repr__(self):
+        return f"User('{self.title}', '{self.date_posted}')"
 
 # Adding dummy data to show how data is passed to the app using list of dictionaries
 posts = [
