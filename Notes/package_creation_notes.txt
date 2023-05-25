@@ -1,0 +1,13 @@
+Turning solution into a package should fix any import issues that we run into by having application run modularly
+1. Need to create __init__.py file in folder of same name as app ("app" in this case)
+2. Add templates folder, static folder, form.py and models.py to <app_name> folder
+3. Add from imports to database instantiation from app.py to __init__.py
+4. Add from User and Post imports to right above "if __name__ == "__main__":" to routes.py file, also in app folder
+5. Renaming app.py to run.py, as it will just be used for running app
+6. Add "from app import app" to run.py
+7. Remove all imports from "flask" from __init__.py except for "Flask" and add to routes.py
+8. Do the same with forms import, except cut and paste everything
+9. All custom modules need "app." in front of their names when imported
+10. Need "from app import app" in routes
+11. Need "from app import routes" at END of __init__.py
+Now need to run run.py

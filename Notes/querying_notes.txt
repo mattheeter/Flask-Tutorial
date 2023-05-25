@@ -35,3 +35,13 @@ post.author # To get the username
 db.drop_all() # Removes all data from database
 db.create.all() # Recreates database structure *Does Not Add Back Data*
 # Querying User or Post will give blank lists
+
+______________________________________________________________________________________________________________________
+
+After creating package:
+python # Starting interpreter
+from app import db, app
+from app.models import User, Post
+app.app_context().push()
+db.create_all() # Database is created within package folder - good
+User.query.all()
