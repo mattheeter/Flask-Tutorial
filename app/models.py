@@ -1,7 +1,13 @@
 from datetime import datetime
-from app import db
+from app import db, login_manager # Getting database and login manager classes
+from flask_login import UserMixin
 
-class User(db.Model): # Creating class User which inherits from db.model
+@login_manager.user_loader
+def load_user(user_id):
+    # Function to have LoginManager manage sessions for us
+    return User.query.get(int(user_id))
+
+class User(db.Model, UserMixin): # Creating class User which inherits from db.model and UserMixin
     id = db.Column(db.Integer, primary_key=True) # ID is of integer type and is unique to user (primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)

@@ -1,0 +1,8 @@
+1. Installing bcrypt with "pip istall bcrypt"
+2. Import with "from flask_bcrypt import Bcrypt"
+3. Instantiate clss with "<name> = Bycrypt()"
+4. Generate password hash with "bcrypt.generate_password_hash(<str: password>)"
+    a. This is of type byte
+    b. To make it as a string use ".decode('utf-8')" at the end of 4
+5. Use "bcrypt.check_password_hash(<actual_password>, <password_to_check>)" to check the password
+6. For logging in, need to "pip install flask-login" and import it to application
